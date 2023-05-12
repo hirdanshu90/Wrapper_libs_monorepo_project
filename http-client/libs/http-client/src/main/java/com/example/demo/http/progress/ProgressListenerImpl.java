@@ -1,5 +1,12 @@
 package com.example.demo.http.progress;
 
+/**
+ * Class Implementation of ProgressListener.
+ * Prints percentage completion of a request, if content length is known.
+ * <p>
+ * Taken from OkHttp recipes on Github
+ * @see <a href="https://github.com/square/okhttp/blob/master/samples/guide/src/main/java/okhttp3/recipes/Progress.java">Progress Recipe</a>
+ */
 public class ProgressListenerImpl implements ProgressListener {
     boolean firstUpdate = true;
 

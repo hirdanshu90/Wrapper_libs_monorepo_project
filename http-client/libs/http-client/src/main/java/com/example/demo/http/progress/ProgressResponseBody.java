@@ -10,6 +10,12 @@ import okio.ForwardingSource;
 import okio.Okio;
 import okio.Source;
 
+/**
+ * A wrapper class that wraps {@link ResponseBody} and {@link ProgressListener} 
+ * <p>
+ * Taken from OkHttp recipes on Github
+ * @see <a href="https://github.com/square/okhttp/blob/master/samples/guide/src/main/java/okhttp3/recipes/Progress.java">Progress Recipe</a>
+ */
 public class ProgressResponseBody extends ResponseBody {
     private final ResponseBody responseBody;
     private final ProgressListener progressListener;
