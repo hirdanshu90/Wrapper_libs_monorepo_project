@@ -2,10 +2,12 @@ package com.example.demo.http.interceptors;
 
 import java.io.IOException;
 
-import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * This Interceptor adds max number of retries and trigger retries until maximum number of chances are exhausted.
+ */
 public class RetryInterceptor implements com.example.demo.http.interceptors.Interceptor {
     private int maxRetries;
 
