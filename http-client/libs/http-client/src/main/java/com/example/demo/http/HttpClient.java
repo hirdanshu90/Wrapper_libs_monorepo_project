@@ -24,10 +24,6 @@ import okhttp3.Request.Builder;
 
 
 /**
- * A call is a request that has been prepared for execution. A call can be canceled. As this object
- * represents a single request/response pair (stream), it cannot be executed twice.
- */
-/**
  * HttpClient is a wrapper class that wraps OKHttp Library and simplifies creating a client and a request.
  * It returns string as response. It can be used to send both sync and async requests.
  * It supports GET, POST, PUT and DELETE requests.

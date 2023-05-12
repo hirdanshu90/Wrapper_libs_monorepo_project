@@ -28,11 +28,11 @@ public class HttpClientTests {
         }
         """;
 
+    private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+
      @Test
 	void testGetandProgress() {
 		String url = "https://publicobject.com/helloworld.txt";
-        String url2 = "https://jsonplaceholder.typicode.com/todos/1";
-        String url3 = "https://publicobject.com/2023/04/16/read-a-project-file-in-a-kotlin-multiplatform-test/";
 		String response = client.withUrl(url).withProgress().sendRequest();
         System.out.println("-----------------------------------------------------");
         System.out.println("Test Get");
@@ -44,8 +44,6 @@ public class HttpClientTests {
     @Test
 	void testAsyncGet() {
 		String url = "https://publicobject.com/helloworld.txt";
-        String url2 = "https://jsonplaceholder.typicode.com/todos/1";
-        String url3 = "https://publicobject.com/2023/04/16/read-a-project-file-in-a-kotlin-multiplatform-test/";
 		CompletableFuture<String> future = client.withUrl(url).sendAsyncRequest();
         System.out.println("-----------------------------------------------------");
         System.out.println("Test Async Get");
@@ -56,10 +54,8 @@ public class HttpClientTests {
 
     @Test
 	void testQueryParams() {
-		String url = "https://publicobject.com/helloworld.txt";
-        String url2 = "https://jsonplaceholder.typicode.com/posts";
-        String url3 = "https://publicobject.com/2023/04/16/read-a-project-file-in-a-kotlin-multiplatform-test/";
-		String response = client.withUrl(url2).addQueryParam("id", "1").sendRequest();
+        String url = "https://jsonplaceholder.typicode.com/posts";
+		String response = client.withUrl(url).addQueryParam("id", "1").sendRequest();
         System.out.println("-----------------------------------------------------");
         System.out.println("Test adding Query Params");
 		System.out.println(response);
@@ -69,10 +65,8 @@ public class HttpClientTests {
 
     @Test
 	void testTimeout_Succeeds() {
-		String url = "https://publicobject.com/helloworld.txt";
-        String url2 = "https://jsonplaceholder.typicode.com/todos/1";
-        String url3 = "http://httpbin.org/delay/2";
-		String response = client.withUrl(url3).withTimeOuts(10).sendRequest();
+        String url = "http://httpbin.org/delay/2";
+		String response = client.withUrl(url).withTimeOuts(10).sendRequest();
         System.out.println("-----------------------------------------------------");
         System.out.println("Test TimeOut");
 		System.out.println(response);
@@ -82,10 +76,8 @@ public class HttpClientTests {
 
     @Test
 	void testTimeout_Fails() {
-		String url = "https://publicobject.com/helloworld.txt";
-        String url2 = "https://jsonplaceholder.typicode.com/todos/1";
-        String url3 = "http://httpbin.org/delay/4";
-		String response = client.withUrl(url3).withTimeOuts(2).sendRequest();
+        String url = "http://httpbin.org/delay/4";
+		String response = client.withUrl(url).withTimeOuts(2).sendRequest();
         System.out.println("-----------------------------------------------------");
         System.out.println("Test TimeOut 2");
 		System.out.println(response);
@@ -95,8 +87,8 @@ public class HttpClientTests {
 
     @Test
 	void testPost() {
-        String url2 = "https://jsonplaceholder.typicode.com/posts";
-		String response = client.withUrl(url2).post(requestBody).sendRequest();
+        String url = "https://jsonplaceholder.typicode.com/posts";
+		String response = client.withUrl(url).post(requestBody).sendRequest();
         System.out.println("-----------------------------------------------------");
 		System.out.println(response);
         System.out.println("-----------------------------------------------------");
@@ -104,8 +96,8 @@ public class HttpClientTests {
 	}
     @Test
 	void testPut() {
-        String url2 = "https://jsonplaceholder.typicode.com/posts/1";
-		String response = client.withUrl(url2).put(requestBody).sendRequest();
+        String url = "https://jsonplaceholder.typicode.com/posts/1";
+		String response = client.withUrl(url).put(requestBody).sendRequest();
         System.out.println("-----------------------------------------------------");
 		System.out.println(response);
         System.out.println("-----------------------------------------------------");
@@ -114,8 +106,8 @@ public class HttpClientTests {
 
     @Test
 	void testDelete() {
-        String url2 = "https://jsonplaceholder.typicode.com/posts/1";
-		String response = client.withUrl(url2).delete(requestBody).sendRequest();
+        String url = "https://jsonplaceholder.typicode.com/posts/1";
+		String response = client.withUrl(url).delete(requestBody).sendRequest();
         System.out.println("-----------------------------------------------------");
 		System.out.println(response);
         System.out.println("-----------------------------------------------------");
@@ -124,8 +116,8 @@ public class HttpClientTests {
 
     @Test
 	void testInterceptor() {
-        String url2 = "https://publicobject.com/helloworld.txt";
-		String response = client.withUrl(url2)
+        String url = "https://publicobject.com/helloworld.txt";
+		String response = client.withUrl(url)
                             .addInterceptor(new SampleInterceptor())
                             .sendRequest();
         System.out.println("-----------------------------------------------------");
@@ -137,8 +129,8 @@ public class HttpClientTests {
 
     @Test
 	void testBasicAuthenticator() {
-        String url2 = "https://publicobject.com/secrets/hellosecret.txt";
-		String response = client.withUrl(url2)
+        String url = "https://publicobject.com/secrets/hellosecret.txt";
+		String response = client.withUrl(url)
                             .authenticateBasic("jesse","password1")
                             .sendRequest();
         System.out.println("-----------------------------------------------------");
@@ -150,8 +142,8 @@ public class HttpClientTests {
 
     @Test
 	void testAuthenticator() {
-        String url2 = "https://publicobject.com/secrets/hellosecret.txt";
-		String response = client.withUrl(url2)
+        String url = "https://publicobject.com/secrets/hellosecret.txt";
+		String response = client.withUrl(url)
                             .authenticateIfRequired("jesse","password1")
                             .sendRequest();
         System.out.println("-----------------------------------------------------");
@@ -160,8 +152,6 @@ public class HttpClientTests {
         System.out.println("-----------------------------------------------------");
         assertNotEquals("IOException", response);
 	}
-
-    private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
     @Test
     public void cancelTest() throws Exception {
