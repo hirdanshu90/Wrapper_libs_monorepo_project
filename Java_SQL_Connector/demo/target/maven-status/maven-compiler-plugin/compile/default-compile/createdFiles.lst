@@ -1,7 +1,5 @@
+com\example\HikariCPConfig.class
 com\example\QueryManager.class
-com\example\Main.class
-com\example\Transaction.class
-com\example\ConnectorVersion1.class
-com\example\LoggerFactory.class
-com\example\ConnectionPool.class
 com\example\DatabaseWrapper.class
+com\example\Main.class
+com\example\ConnectorVersion1.class

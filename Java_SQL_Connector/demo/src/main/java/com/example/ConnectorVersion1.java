@@ -18,25 +18,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
-public class ConnectorVersion1 {
+class ConnectorVersion1 {
 
     private static final Logger logger = Logger.getLogger(ConnectorVersion1.class.getName());
-    private static final String CONFIG_FILE = "demo/src/main/java/com/example/Configuration.properties";
-    private static final int MAX_POOL_SIZE = 20;
     private static ConnectorVersion1 instance;
-    private ConnectionPool connectionPool;
+    private HikariDataSource dataSource;
 
     private ConnectorVersion1() {
-        Properties properties = loadProperties(CONFIG_FILE);
-        String dbUrl = properties.getProperty("db.url");
-        String dbschema = properties.getProperty("db.schema");
-        String dbUsername = properties.getProperty("db.username");
-        String dbPassword = properties.getProperty("db.password");
-
-        connectionPool = new ConnectionPool(dbUrl + dbschema, dbUsername, dbPassword, MAX_POOL_SIZE, 10);
+        try {
+            HikariConfig config = HikariCPConfig.loadConfig();
+            dataSource = new HikariDataSource(config);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Failed to initialize HikariCP", e);
+            throw new RuntimeException("Failed to initialize HikariCP", e);
+        }
     }
 
+    // The Singleton design pattern ensures that there is only one instance of a
+    // class created throughout the execution of a program
     public static ConnectorVersion1 getInstance() {
         if (instance == null) {
             synchronized (ConnectorVersion1.class) {
@@ -48,20 +50,9 @@ public class ConnectorVersion1 {
         return instance;
     }
 
-    private Properties loadProperties(String filename) {
-        Properties properties = new Properties();
-        try (InputStream input = new FileInputStream(filename)) {
-            properties.load(input);
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Failed to load properties file: " + filename, e);
-            throw new RuntimeException("Failed to load properties file: " + filename);
-        }
-        return properties;
-    }
-
     public Connection getConnection() throws SQLException {
         try {
-            return connectionPool.getConnection();
+            return dataSource.getConnection();
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error establishing database connection", e);
             throw e;
@@ -69,9 +60,16 @@ public class ConnectorVersion1 {
     }
 
     public void releaseConnection(Connection connection) {
-        connectionPool.releaseConnection(connection);
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, "Error releasing database connection", e);
+            }
+        }
     }
 
+    // Execute query
     public List<Map<String, Object>> executeQuery(String sql, Object... params) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -113,6 +111,7 @@ public class ConnectorVersion1 {
         }
     }
 
+    // Execute update
     public int executeUpdate(String sql, Object... params) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -136,6 +135,7 @@ public class ConnectorVersion1 {
         }
     }
 
+    // Execute transaction
     public void executeTransaction(String[] sqlStatements) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;

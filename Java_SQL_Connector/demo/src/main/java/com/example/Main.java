@@ -1,6 +1,6 @@
 package com.example;
 
-import java.sql.ResultSet;
+// import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -22,6 +22,7 @@ public class Main {
                 logger.error("Error executing query: " + query, e);
             }
         }
+
         // Example: Select query
         String selectQuery = "SELECT id, enterpriseID, skills FROM goss_skill.skiils_table where id =78";
 
