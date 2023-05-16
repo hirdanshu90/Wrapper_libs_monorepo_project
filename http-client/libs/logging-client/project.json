@@ -1,0 +1,45 @@
+{
+  "name": "logging-client",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/logging-client/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "libs/logging-client"
+      },
+      "dependsOn": [
+        "^install"
+      ],
+      "outputs": [
+        "{workspaceRoot}/libs/logging-client/target"
+      ]
+    },
+    "install": {
+      "executor": "@nxrocks/nx-spring-boot:install",
+      "options": {
+        "root": "libs/logging-client"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/logging-client/target"
+      ]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "libs/logging-client"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/logging-client/target"
+      ]
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "libs/logging-client"
+      }
+    }
+  },
+  "tags": []
+}
