@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
-public class TestChaCha20Poly1305 {
+public class DemoChaCha20Poly1305 {
 
     private static final int NONCE_LEN = 12;                    // 96 bits, 12 bytes
     private static final int MAC_LEN = 16;                      // 128 bits, 16 bytes
