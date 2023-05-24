@@ -1,20 +1,29 @@
 package com.example;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import com.zaxxer.hikari.HikariConfig;
 
 public class DatabaseWrapper {
     private ConnectorVersion1 connector;
+    private static final Logger logger = Logger.getLogger(DatabaseWrapper.class.getName());
 
-    public DatabaseWrapper() {
-        connector = ConnectorVersion1.getInstance();
+    public DatabaseWrapper(Properties properties) {
+        HikariConfig config = HikariCPConfig.loadConfig(properties);
+        connector = ConnectorVersion1.getInstance(config);
     }
 
-    public ResultSet executeQuery(String sql, Object... params) {
+    public List<Map<String, Object>> executeQuery(String sql, Object... params) {
         try {
-            return (ResultSet) connector.executeQuery(sql, params);
+            return connector.executeQuery(sql, params);
         } catch (SQLException e) {
-            e.printStackTrace();
+            // Exception handling
+            logger.log(Level.SEVERE, "Error executing query: " + sql, e);
             return null;
         }
     }
@@ -23,7 +32,8 @@ public class DatabaseWrapper {
         try {
             return connector.executeUpdate(sql, params);
         } catch (SQLException e) {
-            e.printStackTrace();
+            // Exception handling
+            logger.log(Level.SEVERE, "Error executing update: " + sql, e);
             return -1;
         }
     }
@@ -32,11 +42,12 @@ public class DatabaseWrapper {
         try {
             connector.executeTransaction(sqlStatements);
         } catch (SQLException e) {
-            e.printStackTrace();
+            // Exception handling
+            logger.log(Level.SEVERE, "Error executing transaction", e);
         }
     }
 
-    public ResultSet select(String sql, Object... params) {
+    public List<Map<String, Object>> select(String sql, Object... params) {
         return executeQuery(sql, params);
     }
 
