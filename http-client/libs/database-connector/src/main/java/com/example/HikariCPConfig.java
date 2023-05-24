@@ -1,6 +1,5 @@
 package com.example;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -8,11 +7,9 @@ import java.util.Properties;
 import com.zaxxer.hikari.HikariConfig;
 
 public class HikariCPConfig {
-    private static final String CONFIG_FILE = "Java_SQL_Connector/demo/src/main/java/com/example/HikariCP.properties";
+    // private static final String CONFIG_FILE = "HikariCP.properties";
 
-    public static HikariConfig loadConfig() {
-        Properties properties = loadProperties(CONFIG_FILE);
-
+    public static HikariConfig loadConfig(Properties properties) {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(properties.getProperty("db.url"));
         config.setUsername(properties.getProperty("db.username"));
@@ -25,7 +22,7 @@ public class HikariCPConfig {
 
     private static Properties loadProperties(String filename) {
         Properties properties = new Properties();
-        try (InputStream input = new FileInputStream(filename)) {
+        try (InputStream input = HikariCPConfig.class.getClassLoader().getResourceAsStream(filename)) {
             properties.load(input);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load properties file: " + filename);
@@ -40,9 +37,9 @@ public class HikariCPConfig {
         }
         // Perform validation for other required properties
 
-        // Set default values for optional properties if not present
+        // Setting default values for optional properties if not present
         if (properties.getProperty("max.pool.size") == null) {
-            properties.setProperty("max.pool.size", "10");
+            properties.setProperty("max.pool.size", "20");
         }
         // Set default values for other optional properties
     }
