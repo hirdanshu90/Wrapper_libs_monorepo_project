@@ -4,11 +4,7 @@ import java.util.logging.Logger;
 
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Level;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -27,9 +22,8 @@ class ConnectorVersion1 {
     private static ConnectorVersion1 instance;
     private HikariDataSource dataSource;
 
-    private ConnectorVersion1() {
+    private ConnectorVersion1(HikariConfig config) {
         try {
-            HikariConfig config = HikariCPConfig.loadConfig();
             dataSource = new HikariDataSource(config);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Failed to initialize HikariCP", e);
@@ -39,11 +33,11 @@ class ConnectorVersion1 {
 
     // The Singleton design pattern ensures that there is only one instance of a
     // class created throughout the execution of a program
-    public static ConnectorVersion1 getInstance() {
+    public static ConnectorVersion1 getInstance(HikariConfig config) {
         if (instance == null) {
             synchronized (ConnectorVersion1.class) {
                 if (instance == null) {
-                    instance = new ConnectorVersion1();
+                    instance = new ConnectorVersion1(config);
                 }
             }
         }
