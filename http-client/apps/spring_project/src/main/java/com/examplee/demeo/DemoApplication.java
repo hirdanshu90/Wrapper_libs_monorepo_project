@@ -1,11 +1,10 @@
 package com.examplee.demeo;
 
-import com.example.demo.http.HttpClient;
-import com.example.DatabaseWrapper;
+import com.accenture.goss.http.HttpClient;
+import com.accenture.goss.ConsoleLoggingClient;
+import com.accenture.goss.DatabaseWrapper;
 
-// import com.example.logger.FileLoggingClient;
-
-import com.example.demo.crypto.ChaCha20Poly1305;
+import com.accenture.goss.crypto.ChaCha20Poly1305;
 
 import java.nio.ByteBuffer;
 import java.security.NoSuchAlgorithmException;
@@ -17,7 +16,6 @@ import java.util.Properties;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import com.example.logger.ConsoleLoggingClient;
 import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,6 +25,7 @@ public class DemoApplication {
 
 	public static void main(String[] args) throws Exception {
 
+		System.out.println(" ..........logging library.......");
 		ConsoleLoggingClient consolelog = new ConsoleLoggingClient();
 
 		System.out.println(" ..........Http client library.......");
@@ -35,16 +34,16 @@ public class DemoApplication {
 		HttpClient client = new HttpClient();
 		String url = "https://jsonplaceholder.typicode.com/posts";
 		String response = client.withUrl(url).addQueryParam("id", "1").sendRequest();
-    consolelog.log((response));
-//		System.out.println(response);
+		consolelog.log((response));
+		// System.out.println(response);
 
 		System.out.println(" ...........Database_connector library.......");
 		System.out.println("..............................................");
 
 		Properties dbProperties = new Properties();
-		dbProperties.setProperty("db.url", "jdbc:mysql://needmoney.dev:3306/inventory");
+		dbProperties.setProperty("db.url", "jdbc:mysql://localhost:3306/goss_skill");
 		dbProperties.setProperty("db.username", "root");
-		dbProperties.setProperty("db.password", "debezium");
+		dbProperties.setProperty("db.password", "gossadmin");
 		dbProperties.setProperty("max.pool.size", "20");
 
 		// Create an instance of DatabaseWrapper using the configured properties
