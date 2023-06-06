@@ -16,8 +16,6 @@ import java.util.Properties;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import org.json.JSONObject;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
