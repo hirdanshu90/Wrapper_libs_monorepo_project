@@ -9,9 +9,9 @@
 		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.accenture.goss</groupId>
-	<artifactId>http_client</artifactId>
+	<artifactId>http-client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>HttpClient</name>
+	<name>Http Client</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>

@@ -11,9 +11,9 @@
 		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.accenture.goss</groupId>
-	<artifactId>crypto_client</artifactId>
+	<artifactId>crypto-client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>CryptoClient</name>
+	<name>Crypto Client</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>

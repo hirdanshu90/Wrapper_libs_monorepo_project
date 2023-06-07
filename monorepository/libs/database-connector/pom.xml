@@ -6,10 +6,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.accenture.goss</groupId>
-  <artifactId>database_connector_MySQL</artifactId>
+  <artifactId>database-connector-mysql</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>demo</name>
+  <name>Database Connector MySQL</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
