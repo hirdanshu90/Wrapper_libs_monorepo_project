@@ -31,7 +31,7 @@
 
 		<dependency>
 			<groupId>com.accenture.goss</groupId>
-			<artifactId>http_client</artifactId>
+			<artifactId>http-client</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
@@ -39,7 +39,7 @@
 		<!-- MYSQL connector -->
 		<dependency>
 			<groupId>com.accenture.goss</groupId>
-			<artifactId>database_connector_MySQL</artifactId>
+			<artifactId>database-connector-mysql</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
@@ -47,14 +47,14 @@
 		<!-- For crypto client -->
 		<dependency>
 			<groupId>com.accenture.goss</groupId>
-			<artifactId>crypto_client</artifactId>
+			<artifactId>crypto-client</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 		<!-- logging -->
 		<dependency>
 			<groupId>com.accenture.goss</groupId>
-			<artifactId>logging</artifactId>
+			<artifactId>logging-client</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
