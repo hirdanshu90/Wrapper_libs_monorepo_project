@@ -5,22 +5,25 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import com.accenture.goss.caching.CachingClient;
 import com.accenture.goss.caching.Exceptions.CacheNotBuiltException;
 
 public class CachingClientTests {
 
+    Logger logger = LoggerFactory.getLogger(CachingClientTests.class);
     @Test
     void testGetandMaxSize() {
         CachingClient<String,String> cachingClient = new CachingClient<>();
         cachingClient = cachingClient.withMaxSize(1).buildCache(k -> "Data for "+k+": "+k);
-        System.out.println(cachingClient.get("A"));
+        logger.info(cachingClient.get("A"));
+        //System.out.println(cachingClient.get("A"));
         assertEquals(1,cachingClient.cacheSize());
-        System.out.println(cachingClient.get("B"));
+        logger.info(cachingClient.get("B"));
         cachingClient.cleanUp();
         assertEquals(1,cachingClient.cacheSize());
     }
@@ -38,10 +41,10 @@ public class CachingClientTests {
     void testPut() {
         CachingClient<String,String> cachingClient = new CachingClient<>();
         cachingClient = cachingClient.buildCache(k -> "Data for "+k+": "+k);
-        System.out.println(cachingClient.get("A"));
+        logger.info(cachingClient.get("A"));
         assertEquals(1,cachingClient.cacheSize());
         cachingClient.put("B", "Value put for B");
-        System.out.println(cachingClient.get("B"));
+        logger.info(cachingClient.get("B"));
         assertEquals("Value put for B", cachingClient.get("B"));
     }
 
@@ -49,7 +52,7 @@ public class CachingClientTests {
     void testEvictionbyWriteTime() throws InterruptedException {
         CachingClient<String,String> cachingClient = new CachingClient<>();
         cachingClient = cachingClient.withWriteExpiryLimit(5).withMaxSize(1).buildCache(k -> "Data for "+k+": "+k);
-        System.out.println(cachingClient.get("A"));
+        logger.info(cachingClient.get("A"));
         cachingClient.cleanUp();
         assertEquals(1,cachingClient.cacheSize());
         Thread.sleep(5500);
@@ -61,7 +64,7 @@ public class CachingClientTests {
     void testEvictionbyAccessTime() throws InterruptedException {
         CachingClient<String,String> cachingClient = new CachingClient<>();
         cachingClient = cachingClient.withAccessExpiryLimit(4).withMaxSize(1).buildCache(k -> "Data for "+k+": "+k);
-        System.out.println(cachingClient.get("A"));
+        logger.info(cachingClient.get("A"));
         Thread.sleep(3500);
         cachingClient.cleanUp();
         assertEquals(1,cachingClient.cacheSize());
@@ -81,7 +84,7 @@ public class CachingClientTests {
     void testRemove() {
         CachingClient<String,String> cachingClient = new CachingClient<>();
         cachingClient = cachingClient.buildCache(k -> "Data for "+k+": "+k);
-        System.out.println(cachingClient.get("A"));
+        logger.info(cachingClient.get("A"));
         assertEquals(1,cachingClient.cacheSize());
         cachingClient.remove("A");
         assertEquals(0, cachingClient.cacheSize());
@@ -91,8 +94,8 @@ public class CachingClientTests {
     void testRemoveAll() {
         CachingClient<String,String> cachingClient = new CachingClient<>();
         cachingClient = cachingClient.buildCache(k -> "Data for "+k+": "+k);
-        System.out.println(cachingClient.get("A"));
-        System.out.println(cachingClient.get("B"));
+        logger.info(cachingClient.get("A"));
+        logger.info(cachingClient.get("B"));
         assertEquals(2,cachingClient.cacheSize());
         cachingClient.removeAll();
         assertEquals(0, cachingClient.cacheSize());
@@ -102,8 +105,8 @@ public class CachingClientTests {
     void testWeakEvictionAfterGC() {
         CachingClient<String,String> cachingClient = new CachingClient<>();
         cachingClient = cachingClient.enableWeakKeys().enableWeakValues().buildCache(k -> "Data for "+k+": "+k);
-        System.out.println(cachingClient.get("A"));
-        System.out.println(cachingClient.get("B"));
+        cachingClient.get("A");
+        cachingClient.get("B");
         assertEquals(2,cachingClient.cacheSize());
         System.gc();
         cachingClient.cleanUp();
@@ -115,8 +118,6 @@ public class CachingClientTests {
         CachingClient<String,String> cachingClient = new CachingClient<>();
         cachingClient = cachingClient.buildAsyncCache(k -> "Data for "+k+": "+k);
         CompletableFuture<String> future = cachingClient.getAsync("AB");
-        // future.thenAccept(cachedResponse -> System.out.println(cachedResponse));
-        // System.out.println(future.get());
         future.thenAccept(cachedResponse -> assertEquals("Data for AB: AB",cachedResponse));
     }
 
