@@ -13,6 +13,7 @@ import com.accenture.goss.http.progress.ProgressResponseBody;
 import okhttp3.Authenticator;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.ConnectionPool;
 import okhttp3.Credentials;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -260,6 +261,15 @@ public class HttpClient {
         clientBuilder.readTimeout(timeOut, TimeUnit.SECONDS);
         clientBuilder.writeTimeout(timeOut, TimeUnit.SECONDS);
         clientBuilder.connectTimeout(timeOut, TimeUnit.SECONDS);
+        return this;
+    }
+
+    /**
+     * This sets maxIdleConnections and Alive duration for the connection pool of Http client.
+     */
+    public HttpClient configureConnectionPool(int maxIdleConnections, long keepAliveDuration) {
+        ConnectionPool connectionPool = new ConnectionPool(maxIdleConnections, keepAliveDuration, TimeUnit.SECONDS);
+        clientBuilder.connectionPool(connectionPool);
         return this;
     }
 
