@@ -1,0 +1,45 @@
+{
+  "name": "authorisation-client",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/authorisation-client/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "libs/authorisation-client"
+      },
+      "dependsOn": [
+        "^install"
+      ],
+      "outputs": [
+        "{workspaceRoot}/libs/authorisation-client/target"
+      ]
+    },
+    "install": {
+      "executor": "@nxrocks/nx-spring-boot:install",
+      "options": {
+        "root": "libs/authorisation-client"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/authorisation-client/target"
+      ]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "libs/authorisation-client"
+      },
+      "outputs": [
+        "{workspaceRoot}/libs/authorisation-client/target"
+      ]
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "libs/authorisation-client"
+      }
+    }
+  },
+  "tags": []
+}
