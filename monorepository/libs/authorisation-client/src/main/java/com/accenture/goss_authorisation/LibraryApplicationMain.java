@@ -2,6 +2,10 @@ package com.accenture.goss_authorisation;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.accenture.goss_authorisation.wrapper_classes.CreateUserEndpointWrapper;
+import com.accenture.goss_authorisation.wrapper_classes.JwtTokenGenerator;
+
 import java.net.URI;
 
 import java.net.http.HttpClient;
@@ -83,11 +87,6 @@ public class LibraryApplicationMain {
 			e.printStackTrace();
 		}
 
-
 	}
 
 }
-
-
-
-

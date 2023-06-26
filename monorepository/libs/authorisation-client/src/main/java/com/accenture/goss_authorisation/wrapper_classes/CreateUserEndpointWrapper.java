@@ -1,4 +1,4 @@
-package com.accenture.goss_authorisation;
+package com.accenture.goss_authorisation.wrapper_classes;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -58,5 +58,3 @@ public class CreateUserEndpointWrapper {
         }
     }
 }
-
-
