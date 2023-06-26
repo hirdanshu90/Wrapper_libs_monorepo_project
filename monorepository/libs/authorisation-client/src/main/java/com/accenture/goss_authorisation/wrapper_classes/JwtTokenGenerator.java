@@ -10,7 +10,6 @@ import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Wrapper class.
 public class JwtTokenGenerator {
 
     private final String loginEndpoint;
@@ -36,7 +35,7 @@ public class JwtTokenGenerator {
                 outputStream.write(payload.getBytes());
                 outputStream.flush();
             } catch (IOException e) {
-                // Handle exception
+                System.err.println("Error while writing payload: " + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -48,7 +47,7 @@ public class JwtTokenGenerator {
                     response.append(line);
                 }
             } catch (IOException e) {
-                // Handle exception while reading response body
+                System.err.println("Error while reading response: " + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -59,21 +58,24 @@ public class JwtTokenGenerator {
                     String jwtToken = jsonObject.getString("jwtToken");
                     String username = jsonObject.getString("username");
 
+                    System.out.println("JWT Token: " + jwtToken);
                     // Store the JWT Token and perform further actions
 
                     return jwtToken;
 
                 } catch (JSONException e) {
+                    System.err.println("Error parsing JSON response: " + e.getMessage());
                     e.printStackTrace();
                 }
             } else {
-                // Handle the error response
-                System.out.println("Error: " + response.toString());
+                System.err.println("Error response received. Response Code: " + responseCode);
+                System.err.println("Error Response: " + response.toString());
             }
 
             connection.disconnect();
 
         } catch (IOException e) {
+            System.err.println("Error while connecting to the login endpoint: " + e.getMessage());
             e.printStackTrace();
         }
 
