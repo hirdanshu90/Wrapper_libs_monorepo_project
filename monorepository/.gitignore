@@ -16,8 +16,7 @@ node_modules
 *.launch
 .settings/
 *.sublime-workspace
-libs/authorisation-client/.mvn/wrapper
-libs/authorisation-client/target
+
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json
