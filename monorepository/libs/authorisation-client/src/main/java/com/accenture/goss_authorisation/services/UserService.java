@@ -19,15 +19,6 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // public UserService() {
-    // store.add(new User(UUID.randomUUID().toString(), "Hirdanshu",
-    // "hirdanshu.vij@accenture.com"));
-    // store.add(new User(UUID.randomUUID().toString(), "Parth",
-    // "parth@accenture.com"));
-    // store.add(new User(UUID.randomUUID().toString(), "Angelo",
-    // "angelo@accenture.com"));
-    // }
-
     public List<User> getUsers() {
         return userRepository.findAll();
     }

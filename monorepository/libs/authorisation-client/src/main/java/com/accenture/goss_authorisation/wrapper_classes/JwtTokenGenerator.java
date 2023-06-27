@@ -9,6 +9,9 @@ import java.net.URL;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 public class JwtTokenGenerator {
 
@@ -37,6 +40,7 @@ public class JwtTokenGenerator {
             } catch (IOException e) {
                 System.err.println("Error while writing payload: " + e.getMessage());
                 e.printStackTrace();
+                return null;
             }
 
             int responseCode = connection.getResponseCode();
@@ -49,6 +53,7 @@ public class JwtTokenGenerator {
             } catch (IOException e) {
                 System.err.println("Error while reading response: " + e.getMessage());
                 e.printStackTrace();
+                return null;
             }
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -66,19 +71,21 @@ public class JwtTokenGenerator {
                 } catch (JSONException e) {
                     System.err.println("Error parsing JSON response: " + e.getMessage());
                     e.printStackTrace();
+                    return null;
                 }
+            } else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                System.err.println("Invalid email or password. Please check your credentials.");
+                return null;
             } else {
                 System.err.println("Error response received. Response Code: " + responseCode);
                 System.err.println("Error Response: " + response.toString());
+                return null;
             }
-
-            connection.disconnect();
 
         } catch (IOException e) {
             System.err.println("Error while connecting to the login endpoint: " + e.getMessage());
             e.printStackTrace();
+            return null;
         }
-
-        return null;
     }
 }
