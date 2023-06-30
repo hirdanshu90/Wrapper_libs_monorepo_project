@@ -10,8 +10,8 @@
 		<relativePath />
 		<!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.accenture.goss</groupId>
-	<artifactId>authorisation_authentication_client</artifactId>
+	<groupId>com.accenture.gossauthorisation</groupId>
+	<artifactId>authorisationauthenticationclient</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>authorisation-client</name>
 	<description>Demo project for Spring Boot</description>
@@ -32,6 +32,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		<!-- Apache HttpClient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.13</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.json</groupId>
@@ -134,6 +141,8 @@
 					</includes>
 				</configuration>
 			</plugin>
+			<!-- Spring Boot Maven Plugin -->
+
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
