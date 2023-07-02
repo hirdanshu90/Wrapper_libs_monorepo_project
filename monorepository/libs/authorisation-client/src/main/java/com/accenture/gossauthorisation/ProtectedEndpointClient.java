@@ -34,10 +34,10 @@ public class ProtectedEndpointClient {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(ENDPOINT_URL);
 
-        httpGet.setHeader("Username", "hirdanshu.vij@accenture.com");
+        httpGet.setHeader("username", "hirdanshu.vij@accenture.com");
         httpGet.setHeader("Password", "hir");
         httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken);
-        
+
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             int statusCode = response.getStatusLine().getStatusCode();
             String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);

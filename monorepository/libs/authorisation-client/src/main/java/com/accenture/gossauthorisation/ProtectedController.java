@@ -20,7 +20,7 @@ public class ProtectedController {
     @GetMapping
     public ResponseEntity<String> protectedEndpoint(
             @RequestHeader("Authorization") String authorizationHeader,
-            @RequestHeader("Username") String username,
+            @RequestHeader("username") String username,
             @RequestHeader("Password") String password) {
         // Extract the token from the Authorization header
         String token = extractToken(authorizationHeader);
