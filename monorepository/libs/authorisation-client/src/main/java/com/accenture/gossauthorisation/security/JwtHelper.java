@@ -19,7 +19,7 @@ public class JwtHelper {
 
     private final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 10 * 60 * 60;
 
     // Retrieve username from jwt token
     public String getUsernameFromToken(String token) {
