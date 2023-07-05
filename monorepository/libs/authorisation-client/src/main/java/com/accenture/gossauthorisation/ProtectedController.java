@@ -29,9 +29,6 @@ public class ProtectedController {
         // Verify the token and retrieve the username
         String validatedUsername = jwtTokenGenerator.validateToken(token, username, password);
         System.out.println("-------------------");
-        System.out.println(validatedUsername);
-        System.out.println(username);
-        System.out.println(password);
 
         // Perform authentication logic based on the provided username and password
         if (validatedUsername != null && validatedUsername.equals(username)) {

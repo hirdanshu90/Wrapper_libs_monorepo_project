@@ -21,7 +21,6 @@ public class JwtTokenGenerator {
 
     public String generateToken(String username, String password) {
         UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
-        System.out.println(userDetails);
         if (userDetails != null && userDetails.getUsername().equals(username)) {
             return jwtHelper.generateToken(userDetails);
         }
@@ -30,7 +29,7 @@ public class JwtTokenGenerator {
 
     public String validateToken(String token, String username, String password) {
         String validatedUsername = jwtHelper.extractUsernameFromToken(token);
-        System.out.println(validatedUsername);
+
         if (validatedUsername != null && validatedUsername.equals(username)) {
             UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
             if (userDetails != null) {

@@ -1,79 +1,102 @@
-// package com.example.demo;
+package com.example.demo;
 
-// import org.apache.logging.log4j.LogManager;
-// import org.apache.logging.log4j.Logger;
-// import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.extension.ExtendWith;
-// import org.springframework.boot.test.context.SpringBootTest;
-// import org.springframework.test.context.junit.jupiter.SpringExtension;
+import com.accenture.gossauthorisation.entities.User;
+import com.accenture.gossauthorisation.security.JwtHelper;
+import com.accenture.gossauthorisation.services.CustomUserDetailService;
+import com.accenture.gossauthorisation.services.UserService;
+import com.accenture.gossauthorisation.wrapperclasses.CreateUserWrapper;
+import com.accenture.gossauthorisation.wrapperclasses.JwtTokenGenerator;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-// import com.accenture.gossauthorisation.wrapperclasses.CreateUserEndpointWrapper;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-// import static org.junit.jupiter.api.Assertions.*;
+public class AuthorisationClientApplicationTests {
 
-// @ExtendWith(SpringExtension.class)
-// @SpringBootTest
-// class AuthorisationClientApplicationTests {
-//     private static final Logger logger = LogManager.getLogger(AuthorisationClientApplicationTests.class);
+    @Mock
+    private UserService userService;
 
-//     @Test
-//     void testCreateUser_Success() {
-//         String endpointUrl = "http://example.com/create-user";
-//         CreateUserEndpointWrapper wrapper = new CreateUserEndpointWrapper(endpointUrl);
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
-//         try {
-//             logger.info("Running testCreateUser_Success");
-//             assertDoesNotThrow(() -> wrapper.createUser("John Doe", "john@example.com", "password123", "About John"));
-//         } catch (Exception e) {
-//             logger.error("Error in testCreateUser_Success", e);
-//             fail("An exception occurred: " + e.getMessage());
-//         }
-//     }
+    @Mock
+    private CustomUserDetailService customUserDetailService;
 
-//     @Test
-//     void testCreateUser_InvalidInputParameters() {
-//         String endpointUrl = "http://example.com/auth/create-user";
-//         CreateUserEndpointWrapper wrapper = new CreateUserEndpointWrapper(endpointUrl);
+    @Mock
+    private JwtHelper jwtHelper;
 
-//         try {
-//             logger.info("Running testCreateUser_InvalidInputParameters");
+    public AuthorisationClientApplicationTests() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-//             // Test when any of the input parameters is null or empty
-//             assertThrows(IllegalArgumentException.class,
-//                     () -> wrapper.createUser(null, "john@example.com", "password123", "About John"));
+    @Test
+    public void testCreateUser_ValidUser_ReturnsCreatedUser() {
+        // Arrange
+        CreateUserWrapper createUserWrapper = new CreateUserWrapper(userService, passwordEncoder);
+        User user = new User();
+        user.setName("John Doe");
+        user.setEmail("john.doe@example.com");
+        user.setPassword("testpassword");
 
-//             assertThrows(IllegalArgumentException.class,
-//                     () -> wrapper.createUser("John Doe", "", "password123", "About John"));
+        when(userService.createUser(any(User.class))).thenReturn(user);
 
-//             // Add more test cases for empty input parameters
+        // Act
+        User createdUser = createUserWrapper.createUser(user);
 
-//             // Test when the 'about' parameter is optional (not required to be non-empty)
-//             assertDoesNotThrow(() -> wrapper.createUser("John Doe", "john@example.com", "password123", ""));
+        // Assert
+        assertNotNull(createdUser);
+        assertEquals(user.getName(), createdUser.getName());
+        assertEquals(user.getEmail(), createdUser.getEmail());
+    }
 
-//             logger.info("Completed testCreateUser_InvalidInputParameters");
-//         } catch (Exception e) {
-//             logger.error("Error in testCreateUser_InvalidInputParameters", e);
-//             fail("An exception occurred: " + e.getMessage());
-//         }
-//     }
+    @Test
+    public void testValidateToken_ValidTokenAndCredentials_ReturnsUsername() {
+        // Arrange
+        JwtTokenGenerator jwtTokenGenerator = new JwtTokenGenerator(jwtHelper, customUserDetailService);
+        String token = "valid-token";
+        String username = "john.doe@example.com";
+        String password = "testpassword";
 
-//     @Test
-//     void testCreateUser_HttpRequestFailure() {
-//         String endpointUrl = "http://example.com/invalid-url";
-//         CreateUserEndpointWrapper wrapper = new CreateUserEndpointWrapper(endpointUrl);
+        when(jwtHelper.extractUsernameFromToken(token)).thenReturn(username);
+        when(customUserDetailService.loadUserByUsername(username)).thenReturn(createUserDetails(username, password));
+        when(passwordEncoder.matches(password, createUserDetails(username, password).getPassword())).thenReturn(true);
+        when(jwtHelper.validateToken(token, createUserDetails(username, password))).thenReturn(true);
 
-//         try {
-//             logger.info("Running testCreateUser_HttpRequestFailure");
+        // Act
+        String validatedUsername = jwtTokenGenerator.validateToken(token, username, password);
 
-//             // Test when the HTTP request fails (e.g., invalid URL, server unreachable)
-//             assertThrows(Exception.class,
-//                     () -> wrapper.createUser("John Doe", "john@example.com", "password123", "About John"));
+        // Assert
+        assertNotNull(validatedUsername);
+        assertEquals(username, validatedUsername);
+    }
 
-//             logger.info("Completed testCreateUser_HttpRequestFailure");
-//         } catch (Exception e) {
-//             logger.error("Error in testCreateUser_HttpRequestFailure", e);
-//             fail("An exception occurred: " + e.getMessage());
-//         }
-//     }
+    @Test
+    public void testValidateToken_InvalidCredentials_ReturnsNull() {
+        // Arrange
+        JwtTokenGenerator jwtTokenGenerator = new JwtTokenGenerator(jwtHelper, customUserDetailService);
+        String token = "valid-token";
+        String username = "john.doe@example.com";
+        String password = "testpassword";
 
-// }
+        when(jwtHelper.extractUsernameFromToken(token)).thenReturn(username);
+        when(customUserDetailService.loadUserByUsername(username)).thenReturn(createUserDetails(username, password));
+        when(passwordEncoder.matches(password, createUserDetails(username, password).getPassword())).thenReturn(false);
+
+        // Act
+        String validatedUsername = jwtTokenGenerator.validateToken(token, username, password);
+
+        // Assert
+        assertNull(validatedUsername);
+    }
+
+    private UserDetails createUserDetails(String username, String password) {
+        // Implement this method based on your UserDetails implementation
+        // Return a mock UserDetails object with the given username and password
+        return null;
+    }
+}
